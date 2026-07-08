@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friend Crusher: Cross Play</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script type="text/javascript">
+        function updateSelectedLetter() {
+            var selectElement = document.getElementById("letterSelect");
+            var selectedValue = selectElement.value;
+            var selectedLetterElement = document.getElementById("selectedLetter");
+            var boxFormElement = document.getElementById("boxForm");
+            
+            if (selectedValue) {
+                selectedLetterElement.textContent = "You selected: " + selectedValue + " letters";
+                selectedLetterElement.hidden = false;
+                var boxFormHTML = '<form action="/word_options" method="post">';
+                boxFormHTML += '{% csrf_token %}';
+                boxFormHTML += '<input type="hidden" name="selected_letter" id="selectedLetterInput" value="' + selectedValue + '">';
+                boxFormHTML += '<table class="ui celled table"><thead><tr><th>Your Playable Letter(s)</th></tr></thead><tbody><tr>';
+                boxFormHTML += '<td><input type="text" name="playable_letters" placeholder="Enter your letter(s)" required></td>';
+                boxFormHTML += '</tr></tbody></table>';
+                boxFormHTML += '<table class="ui celled table"><thead><tr><th span="' + selectedValue + '">Place any Pre-existing Anchor Letter(s) and/or Multipliers</th></tr></thead><tbody><tr>';
+                for (var i = 0; i < selectedValue; i++) {
+                    boxFormHTML += '<td><input type="text" name="letter' + (i + 1) + '" placeholder="Enter letter ' + (i + 1) + '"></td>';
+                }
+                boxFormHTML += '</tr><tr>';
+                for (var i = 0; i < selectedValue; i++) {
+                    boxFormHTML += '<td><select name="multiplier' + (i + 1) + '">';
+                    boxFormHTML += '<option value="1">...</option>'; 
+                    boxFormHTML += '<option value="2L">2L</option>';
+                    boxFormHTML += '<option value="3L">3L</option>';
+                    boxFormHTML += '<option value="2W">2W</option>';
+                    boxFormHTML += '<option value="3W">3W</option>';
+                    boxFormHTML += '</select></td>';
+                }
+                boxFormHTML += '</tr></tbody></table>';
+                boxFormHTML += '<input type="submit" value="Submit">';
+                boxFormHTML += '</form>';
+                boxFormElement.innerHTML = boxFormHTML;
+                boxForm.hidden = false;
+            } else {
+                selectedLetterElement.textContent = "";
+                selectedLetterElement.hidden = true;
+                boxForm.hidden = true;
+                
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Crossplay</h1>
+    <p>Welcome to the Crossplay page! Here you can find information about how to get the most points for your letters and slowly crush the soul of your friendly play mate!</p>
+    <p>This works on a single vector of letter play and allows you to maximize your scoring potential!</p>
+    <p>Stay tuned for updates and guides on how to win more in your favorite games!</p>
+    <p> {{ message }} </p>
+    <p>
+        Letters:
+        <select id="letterSelect" onchange="updateSelectedLetter()">
+            <option value="">Select a number</option>
+            {% for i in numbers %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+        <p></p>
+        <p id="selectedLetter" hidden="true"></p>
+        <p id="displayResults">
+            {% if status == 'success' %}
+                <strong>Matching Words and Scores for {{ playable_letters }}:</strong><br>
+            {% else %}
+                <strong>No matching words found for playable letters: {{ playable_letters }}</strong><br>
+            {% endif %}
+            {% if word_scores %}
+                <ul>
+                    {% for word_score in word_scores %}
+                        <li>{{ word_score.0 }} - {{ word_score.1 }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No matching words found.</p>
+            {% endif %}
+        </p>
+    
+        <p id="boxForm" hidden="true">
+            Boxform!
+        </p>
+        <p id="startOver" style="margin-top: 20px; align: center;">
+            <a href="{% url 'crossplay' %}">== > Start Over <==</a>
+        </p>
+    </p>
+</body>
+</html>
