@@ -13,7 +13,7 @@ def crossplay(request):
         return JsonResponse({'status': 'success', 'data': data})
     else:
         #return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
-        return render(request, 'crossplay.html', {'message': 'Welcome to the Friend Crusher!', 'numbers': [2, 3, 4, 5, 6, 7, 8, 9, 10]})
+        return render(request, 'crossplay.html', {'message': 'Play below', 'numbers': [2, 3, 4, 5, 6, 7, 8, 9, 10]})
 
 def word_options(request):
     if request.method == 'POST':
