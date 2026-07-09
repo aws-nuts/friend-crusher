@@ -66,6 +66,6 @@ def word_options(request):
             word_scores.append([word, score])
         
         #prioritized_matching_words = ['a', 'b', 'c', 'd', 'e']  # Placeholder for the actual prioritized matching words
-        return render(request, 'crossplay.html', {'message': 'Play options initialized.', 'status': 'success', 'matching_words': prioritized_matching_words, 'playable_letters': playable_letters, 'word_scores': word_scores, 'numbers': [2, 3, 4, 5, 6, 7, 8, 9, 10]})
+        return render(request, 'crossplay.html', {'message': 'Play analysis complete.', 'status': 'success', 'matching_words': prioritized_matching_words, 'playable_letters': playable_letters, 'word_scores': word_scores, 'numbers': [2, 3, 4, 5, 6, 7, 8, 9, 10]})
     else:
         return render(request, 'crossplay.html', {'message': 'Hello Newman', 'numbers': [2, 3, 4, 5, 6, 7, 8, 9, 10]})

@@ -52,8 +52,8 @@
     <div style="margin-left: 20px; left: 20px; right: 20px;">
         <h1 style="text-align: center;">Cross Play Optimizer</h1>
         <h4 style="text-align: center;">
-            Welcome to the Cross Play page!  Here you can optimize your turn and identify which words will give you the most points for your letters.<BR>
-            This works on a single vector of letter play and allows you to maximize your scoring potential.<BR>
+            Welcome to the Cross Play Optimizer!  Here you can optimize your word play and identify which words will give you the most points for your letters.<BR>
+            This works on a single vector of letter play (i.e. horizontal or vertical) and allows you to maximize your scoring potential.<BR>
             <span class="ui small comments">{{ message }}</span>
         </h3>
         <hr>
@@ -64,6 +64,9 @@
         <p style="margin-left: 20px; left: 20px; right: 20px;">
             {% if status %}
             <p id="displayResults">
+                <p id="startOver" style="margin-top: 20px; align: center;">
+                    <a class="ui inverted blue button" href="{% url 'crossplay' %}">== > Start Over <==</a>
+                </p>
                 {% if status == 'success' %}
                     <strong>Matching Words and Scores for '{{ playable_letters }}':</strong><br>
                 {% else %}
@@ -92,10 +95,6 @@
                 {% endif %}
             </p>
         
-            
-            <p id="startOver" style="margin-top: 20px; align: center;">
-                <a class="ui inverted blue button" href="{% url 'crossplay' %}">== > Start Over <==</a>
-            </p>
             
             {% endif %}
 
