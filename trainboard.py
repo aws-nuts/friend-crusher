@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import re
+from collections import Counter
 
 def load_weighted_alphabet():
     weighted_letters = {}
@@ -65,7 +66,7 @@ def regex_match_word_list(pattern_string, matching_words_list):
     filtered_word_list = []
     for word in matching_words_list:
         matched = test_regex(pattern_string, word)
-        print("Pattern: " + pattern_string + ", Word: " + word + ", Matched: " + str(matched))
+        #print("Pattern: " + pattern_string + ", Word: " + word + ", Matched: " + str(matched))
         if matched and word not in filtered_word_list:
             filtered_word_list.append(word)
     return filtered_word_list
@@ -112,3 +113,81 @@ def make_it_so_number_one(letters, anchor_letters, pattern_string, words_list):
     filtered_matching_words = regex_match_word_list(pattern_string, matching_words_list)
     print("Filtered matching words:", filtered_matching_words)
     return filtered_matching_words
+
+def create_pattern_string(letters, anchor_letters, max_length):
+    max_word_length = int(max_length)
+    pattern_string = r"^"
+    letters_list = str(letters.tolist())
+    wildcard_pattern = '[a-z]'
+    try: 
+        for i in range(max_word_length):
+            pattern_string_updated = False
+            if i < len(anchor_letters):
+                if anchor_letters[i] != "":
+                    pattern_string += "[" + anchor_letters[i] + "]"
+                    pattern_string_updated = True
+            
+            if not pattern_string_updated:
+                if "*" in letters:
+                    pattern_string += r"" + wildcard_pattern
+                else:
+                    pattern_string += r"" + letters_list
+                
+        pattern_string += r"\Z"
+    except Exception as create_pattern_string_exception:
+        print("ERROR: create_pattern_string: ", create_pattern_string_exception)
+        
+    #print("Pattern string:", pattern_string)
+    return pattern_string
+
+def filter_for_letters(words, letters):
+    filtered_words = []
+
+    max_counts_dict = {}
+    unique_letters_key_list = []
+    for key in Counter(letters).keys():
+        unique_letters_key_list.append(str(key))
+    unique_letters_value_list = []
+    for value in Counter(letters).values():
+        unique_letters_value_list.append(value)
+    for k in range(0,len(unique_letters_key_list)):
+        max_counts_dict[unique_letters_key_list[k]] = unique_letters_value_list[k]
+    print(max_counts_dict)
+
+    for word in words:
+        word_letters_list = []
+        for key in Counter(word).keys():
+            word_letters_list.append(str(key))
+        word_letters_count = []
+        for value in Counter(word).values():
+            word_letters_count.append(value)
+        for j in range(len(word_letters_list)):
+            if word_letters_list[j] in max_counts_dict.keys():
+                if word_letters_count[j] <= max_counts_dict[word_letters_list[j]]:
+                    if word not in filtered_words:
+                        filtered_words.append(word)
+
+    return filtered_words
+
+def engage(letters, anchor_letters, max_length):
+    print("engaging...")
+    print("Letters: ", letters)
+    print("Anchor letters:", anchor_letters)
+    print("Max Length:", max_length)
+    pattern_string = create_pattern_string(letters,anchor_letters,max_length)
+    print("Pattern string: ", pattern_string)
+    words_list = load_dictionary()
+    test_words = regex_match_word_list(pattern_string, words_list)
+    print("Test words length:", len(test_words))
+    filtered_words = filter_for_letters(test_words,letters)
+    print("filtered words length:", len(filtered_words))
+    return filtered_words
+
+if __name__ == '__main__':
+    letters = randomizer_letter_array(7)
+    #letters = np.array(['a','m','l','*','o','i'])
+    anchor_letters = np.array(['a','','','','','',''])
+    
+    max_length = 4
+    filtered_words = engage(letters,anchor_letters, max_length)
+    print("filtered words length:", len(filtered_words))

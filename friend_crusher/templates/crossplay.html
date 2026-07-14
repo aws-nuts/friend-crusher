@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friend Crusher: Cross Play</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script type="text/javascript">
         function updateSelectedLetter() {
@@ -78,14 +77,34 @@
                             <tr>
                                 <th>Word</th>
                                 <th>Score</th>
+                                <th>Points breakdown</th>
                             </tr>
                         </thead>
                         <tbody>
                             
                         {% for word_score in word_scores %}
                             <tr>
-                                <td>{{ word_score.0 }}</td>
-                                <td>{{ word_score.1 }}</td>
+                                <td>
+                                    {{ word_score.0 | safe}}<BR>
+                                </td>
+                                <td>{{ word_score.2 }}</td>
+                                <td>
+                                    <span>
+                                    <table class="ui celled table" style="width: 100%; border: 1px solid black;">
+                                        <tr style="border: 1px solid black;">
+                                            {% for letter in word_score.1  %}
+                                                {{ letter | safe}}
+                                            {% endfor %}
+                                        </tr>
+                                        <tr style="border: 1px solid black;">
+                                            {% for multiplier_value in multiplier_list %}
+                                            <td style="border: 1px solid black;"><span style='font-size: 0.9em; color: gray;'>{{ multiplier_value }}</span></td>
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                    </span>
+                                    
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -103,12 +122,12 @@
             <p id="selectedLetter" hidden="true">
                 <table class="ui celled table">
                     <thead>
-                        <tr><th>1: Number of Letters for your Word:</th></tr>
+                        <tr><th>1: How many letters do you need in your word?</th></tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <select id="letterSelect" onchange="updateSelectedLetter()">
+                                <select id="letterSelect" name="max_letters" onchange="updateSelectedLetter()">
                                     <option value="">Select a number</option>
                                     {% for i in numbers %}
                                         <option value="{{ i }}">{{ i }}</option>
@@ -131,6 +150,12 @@
             
             
         </p>
+    </div>
+
+    <div id="footer" style="margin-left: 20px; left: 20px; right: 20px; width: 100%;">
+        <BR><BR><BR><BR>
+        <hr>
+        <span class="ui small" style="text-align: center;">&copy; 2026 Syncopated Codes LLC</span>
     </div>
 </body>
 </html>

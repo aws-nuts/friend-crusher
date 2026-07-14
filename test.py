@@ -27,6 +27,16 @@ def test_word_matches(words_list):
         assert 'alamony' not in matched_words, 'alamony not in word list.'
         print('TEST PASSED: alamony not found in ' + str(matched_words))
 
+        letters = np.array(['a','m','l','*','o','i'])
+        anchor_letters = np.array(['a'])
+        matched_words = trainboard.make_it_so_number_one(letters, anchor_letters, r"^[a]\w\w?\w?\w?\Z", words_list)
+
+        assert 'alamo' in matched_words, 'alamo not in word list.'
+        print('TEST PASSED: alamo found in ' + str(matched_words))
+
+        assert 'alamony' not in matched_words, 'alamony not in word list.'
+        print('TEST PASSED: alamony not found in ' + str(matched_words))
+
     except AssertionError as assert_error:
         print('TEST FAILED: ' + str(assert_error))
         return False

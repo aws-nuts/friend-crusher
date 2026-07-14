@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-26(d6&03ar6q-r#9=k&9com&_t6ehky!6===8hvbmq+#jukna6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["GameWithKeys-env.eba-2mztsnpr.us-west-2.elasticbeanstalk.com", "friendcrusher.com", "www.friendcrusher.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -67,7 +67,10 @@ TEMPLATES = [
     },
 ]
 
+## 'friend_crusher.wsgi.application' good for local development, but not for production. Uncomment the line below for production.
+## or simply remove .application from the value
 WSGI_APPLICATION = 'friend_crusher.wsgi.application'
+WSGI_APPLICATION = 'friend_crusher.wsgi'
 
 
 # Database
